@@ -4,7 +4,7 @@ package student;
  * Represents a time card for an employee, recording the number of hours worked.
  * Implements the {@link ITimeCard} interface to define time card behavior.
  */
-public class TimeCard implements ITimeCard{
+public class TimeCard implements ITimeCard {
     /** The unique identifier (ID) of the employee associated with this time card. */
     private String id;
 
