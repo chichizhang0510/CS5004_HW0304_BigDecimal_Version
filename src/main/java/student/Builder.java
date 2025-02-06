@@ -23,7 +23,7 @@ public final class Builder {
      */
     public static IEmployee buildEmployeeFromCSV(String csv) {
         String[] parts = csv.split(",");
-        if (parts.length != 7) {
+        if (parts.length < 7) {
             return null;
         }
 
