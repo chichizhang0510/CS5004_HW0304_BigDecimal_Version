@@ -6,8 +6,139 @@ This document is meant to provide a tool for you to demonstrate the design proce
 
 ## (INITIAL DESIGN): Class Diagram
 
-Place your class diagram below. Make sure you check the fil in the browser on github.com to make sure it is rendering correctly. If it is not, you will need to fix it. As a reminder, here is a link to tools that can help you create a class diagram: [Class Resources: Class Design Tools](https://github.com/CS5004-khoury-lionelle/Resources?tab=readme-ov-file#uml-design-tools)
+```mermaid
+classDiagram
+    class Builder {
+        -Builder()
+        +static IEmployee buildEmployeeFromCSV(String csv)
+        +static ITimeCard buildTimeCardFromCSV(String csv)
+    }
 
+    class FileUtil {
+        +static String EMPLOYEE_HEADER
+        +static String PAY_STUB_HEADER
+        +static List<String> readFileToList(String file)
+        +static void writeFile(String outFile, List<String> lines)
+        +static void writeFile(String outFile, List<String> lines, boolean backup)
+    }
+    
+    class PayrollGenerator {
+        -static String DEFAULT_EMPLOYEE_FILE
+        -static String DEFAULT_PAYROLL_FILE
+        -static String DEFAULT_TIME_CARD_FILE
+        -PayrollGenerator()
+        +static void main(String[] args)
+    }
+    
+    class Arguments {
+        -String employeeFile
+        -String payrollFile
+        -String timeCards
+    		+Arguments()
+        +String getEmployeeFile()
+        +String getPayrollFile()
+        +String getTimeCards()
+        +void printHelp()
+        +static Arguments process(String[] args)
+    }
+    
+    class IEmployee {
+        <<interface>>
+        +String getName()
+        +String getID()
+        +double getPayRate()
+        +String getEmployeeType()
+        +double getYTDEarnings()
+        +double getYTDTaxesPaid()
+        +double getPretaxDeductions()
+        +IPayStub runPayroll(double hoursWorked)
+        +String toCSV()
+    }
+    
+    class HourlyEmployee {
+        -String name
+        -String id
+        -double payRate
+        -double ytdEarnings
+        -double ytdTaxesPaid
+        -double pretaxDeductions
+        +String getID()
+        +String getName()
+        +double getPayRate()
+        +double getYTDEarnings()
+        +double getYTDTaxesPaid()
+        +double getPretaxDeductions()
+        +String getEmployeeType()
+        +IPayStub runPayroll(double hoursWorked)
+        +String toCSV()
+    }
+    
+    class SalaryEmployee {
+        -String name
+        -String id
+        -double payRate
+        -double ytdEarnings
+        -double ytdTaxesPaid
+        -double pretaxDeductions
+        +String getID()
+        +String getName()
+        +double getPayRate()
+        +double getYTDEarnings()
+        +double getYTDTaxesPaid()
+        +double getPretaxDeductions()
+        +String getEmployeeType()
+        +IPayStub runPayroll(double hoursWorked)
+        +String toCSV()
+    }
+    
+    class IPayStub {
+        <<interface>>
+        +double getPay()
+        +double getTaxesPaid()
+        +String toCSV()
+    }
+    
+    class PayStub {
+    		-String name
+        -double payAfterTax
+        -double tax
+        -double ytdEarnings
+        -double ytdTaxesPaid
+        +double getPay()
+        +double getTaxesPaid()
+        +String toCSV()
+    }
+    
+    class ITimeCard{
+    		<<interface>>
+    		+String getEmployeeID()
+    		+double getHoursWorked()
+    }
+    
+    class TimeCard {
+        -String id
+        -double hoursWorked
+        +String getEmployeeID()
+        +double getHoursWorked()
+    }
+    
+
+    IEmployee <|-- HourlyEmployee
+    IEmployee <|-- SalaryEmployee
+    IEmployee --> IPayStub : "creates"
+    IPayStub <|-- PayStub
+    ITimeCard <|-- TimeCard
+    
+    Builder --> HourlyEmployee : "creates"
+    Builder --> SalaryEmployee : "creates"
+    Builder --> TimeCard : "creates"
+    Builder --> IEmployee : "creates"
+
+    PayrollGenerator --> Builder : "uses"
+    PayrollGenerator --> Arguments : "uses"
+    PayrollGenerator --> FileUtil : "reads/writes files"
+    PayrollGenerator --> ITimeCard : "processes"
+```
 
 
 
@@ -26,10 +157,49 @@ Write a test (in english) that you can picture for the class diagram you have cr
 
 You should feel free to number your brainstorm. 
 
-1. Test that the `Employee` class properly returns `name` from `getName()`
-2. Test that the `Employee` class properly returns `id` from `getId()`
-3. continue to add your brainstorm here (you don't need to super formal - this is a brainstorm) - yes, you can change the bullets above to something that fits your design.
-
+1. Test that the HourlyEmployee class properly returns name from getName().
+2. Test that the HourlyEmployee class properly returns id from getID().
+3. Test that the HourlyEmployee class properly returns payRate from getPayRate().
+4. Test that the HourlyEmployee class properly returns YTDEarnings from getYTDEarnings().
+5. Test that the HourlyEmployee class properly returns YTDTaxesPaid from getYTDTaxesPaid().
+6. Test that the HourlyEmployee class properly returns pretaxDeductions from getPretaxDeductions().
+7. Test that the HourlyEmployee class correctly identifies as "HOURLY" from getEmployeeType().
+8. Test that the SalaryEmployee class properly returns name from getName().
+9. Test that the SalaryEmployee class properly returns id from getID().
+10. Test that the SalaryEmployee class properly returns payRate from getPayRate().
+11. Test that the SalaryEmployee class properly returns YTDEarnings from getYTDEarnings().
+12. Test that the SalaryEmployee class properly returns YTDTaxesPaid from getYTDTaxesPaid().
+13. Test that the SalaryEmployee class properly returns pretaxDeductions from getPretaxDeductions().
+14. Test that the SalaryEmployee class correctly identifies as "SALARY" from getEmployeeType().
+15. Test that HourlyEmployee.runPayroll(hoursWorked) calculates gross pay correctly for ≤40 hours.
+16. Test that HourlyEmployee.runPayroll(hoursWorked) calculates gross pay correctly for >40 hours (overtime pay included).
+17. Test that HourlyEmployee.runPayroll(hoursWorked) applies pretax deductions correctly.
+18. Test that HourlyEmployee.runPayroll(hoursWorked) calculates correct taxes (22.65%).
+19. Test that HourlyEmployee.runPayroll(hoursWorked) correctly calculates net pay.
+20. Test that SalaryEmployee.runPayroll(hoursWorked) correctly calculates gross pay as (annual salary / 24 pay periods).
+21. Test that SalaryEmployee.runPayroll(hoursWorked) applies pretax deductions correctly.
+22. Test that SalaryEmployee.runPayroll(hoursWorked) calculates correct taxes (22.65%).
+23. Test that SalaryEmployee.runPayroll(hoursWorked) correctly calculates net pay.
+24. Test that runPayroll(hoursWorked) skips payroll calculation if hoursWorked < 0.
+25. Test that PayStub.getPay() correctly returns net pay.
+26. Test that PayStub.getTaxesPaid() correctly returns taxes paid.
+27. Test that PayStub.toCSV() correctly formats the pay stub output string.
+28. Test that TimeCard.getEmployeeID() correctly returns the employee ID.
+29. Test that TimeCard.getHoursWorked() correctly returns the recorded hours worked.
+30. Test that Builder.buildEmployeeFromCSV(csvLine) correctly creates a HourlyEmployee object from a valid CSV line.
+31. Test that Builder.buildEmployeeFromCSV(csvLine) correctly creates a SalaryEmployee object from a valid CSV line.
+32. Test that Builder.buildEmployeeFromCSV(csvLine) returns null if the CSV is incorrectly formatted.
+33. Test that Builder.buildTimeCardFromCSV(csvLine) correctly creates a TimeCard object from a valid CSV line.
+34. Test that Builder.buildTimeCardFromCSV(csvLine) returns null if the CSV is incorrectly formatted.
+35. Test that PayrollGenerator correctly reads employees.csv and creates the appropriate IEmployee objects.
+36. Test that PayrollGenerator correctly reads time_cards.csv and creates ITimeCard objects.
+37. Test that PayrollGenerator correctly matches TimeCard data to the correct IEmployee.
+38. Test that PayrollGenerator correctly calculates and stores pay stubs in pay_stubs.csv.
+39. Test that PayrollGenerator correctly updates employees.csv with YTD earnings and YTD taxes paid.
+40. Test that PayrollGenerator correctly handles cases where time_cards.csv has missing or invalid entries.
+41. Test that FileUtil.readFileToList(filename) correctly reads a CSV file and returns a list of strings.
+42. Test that FileUtil.writeFile(filename, lines) correctly writes a list of strings to a file.
+43. Test that FileUtil.writeFile(filename, lines, true) correctly creates a backup before overwriting.
 
 
 ## (FINAL DESIGN): Class Diagram
@@ -39,7 +209,134 @@ Go through your completed code, and update your class diagram to reflect the fin
 > [!WARNING]
 > If you resubmit your assignment for manual grading, this is a section that often needs updating. You should double check with every resubmit to make sure it is up to date.
 
+```mermaid
+classDiagram
+    class IEmployee {
+        <<interface>>
+        +String getName()
+        +String getID()
+        +double getPayRate()
+        +String getEmployeeType()
+        +double getYTDEarnings()
+        +double getYTDTaxesPaid()
+        +double getPretaxDeductions()
+        +IPayStub runPayroll(double hoursWorked)
+        +String toCSV()
+    }
+    
+    class IPayStub {
+        <<interface>>
+        +double getPay()
+        +double getTaxesPaid()
+        +String toCSV()
+    }
+    
+    class ITimeCard{
+    		<<interface>>
+    		+String getEmployeeID()
+    		+double getHoursWorked()
+    }
+    
+    class HourlyEmployee {
+        -String name
+        -String id
+        -double payRate
+        -double ytdEarnings
+        -double ytdTaxesPaid
+        -double pretaxDeductions
+        +String getID()
+        +String getName()
+        +double getPayRate()
+        +double getYTDEarnings()
+        +double getYTDTaxesPaid()
+        +double getPretaxDeductions()
+        +String getEmployeeType()
+        +IPayStub runPayroll(double hoursWorked)
+        +String toCSV()
+    }
+    
+    class SalaryEmployee {
+        -String name
+        -String id
+        -double payRate
+        -double ytdEarnings
+        -double ytdTaxesPaid
+        -double pretaxDeductions
+        +String getID()
+        +String getName()
+        +double getPayRate()
+        +double getYTDEarnings()
+        +double getYTDTaxesPaid()
+        +double getPretaxDeductions()
+        +String getEmployeeType()
+        +IPayStub runPayroll(double hoursWorked)
+        +String toCSV()
+    }
+    
+    class PayStub {
+    		-String name
+        -double payAfterTax
+        -double tax
+        -double ytdEarnings
+        -double ytdTaxesPaid
+        +double getPay()
+        +double getTaxesPaid()
+        +String toCSV()
+    }
+    
+    class TimeCard {
+        -String id
+        -double hoursWorked
+        +String getEmployeeID()
+        +double getHoursWorked()
+    }
+    
+    class Builder {
+    		-Builder()
+    		+static IEmployee buildEmployeeFromCSV(String csv)
+    		+static ITimeCard buildTimeCardFromCSV(String csv)
+    }
+    
+    class FileUtil {
+    		+static String EMPLOYEE_HEADER
+    		+static String PAY_STUB_HEADER
+    		+static List<String> readFileToList(String file)
+    		+static void writeFile(String outFile, List<String> lines)
+    		+static void writeFile(String outFile, List<String> lines, boolean backup)
+    }
+    
+    class PayrollGenerator {
+        -static String DEFAULT_EMPLOYEE_FILE
+        -static String DEFAULT_PAYROLL_FILE
+        -static String DEFAULT_TIME_CARD_FILE
+        -PayrollGenerator()
+        +static void main(String[] args)
+    }
+    
+    class Arguments {
+        -String employeeFile
+        -String payrollFile
+        -String timeCards
+    		+Arguments()
+        +String getEmployeeFile()
+        +String getPayrollFile()
+        +String getTimeCards()
+        +void printHelp()
+        +static Arguments process(String[] args)
+    }
 
+    IEmployee <|-- HourlyEmployee
+    IEmployee <|-- SalaryEmployee
+    IPayStub <|-- PayStub
+    ITimeCard <|-- TimeCard
+    
+    Builder --> HourlyEmployee : "creates"
+    Builder --> SalaryEmployee : "creates"
+    Builder --> TimeCard : "creates"
+
+    PayrollGenerator --> Builder : "uses"
+    PayrollGenerator --> Arguments : "uses"
+```
 
 
 

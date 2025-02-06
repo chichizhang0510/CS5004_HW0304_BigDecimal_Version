@@ -22,6 +22,24 @@ public final class Builder {
      * @return the employee object
      */
     public static IEmployee buildEmployeeFromCSV(String csv) {
+        String[] parts = csv.split(",");
+        if (parts.length != 7) {
+            return null;
+        }
+
+        String type = parts[0];
+        String name = parts[1];
+        String id = parts[2];
+        double payRate = Double.parseDouble(parts[3]);
+        double pretaxDeductions = Double.parseDouble(parts[4]);
+        double ytdEarnings = Double.parseDouble(parts[5]);
+        double ytdTaxesPaid = Double.parseDouble(parts[6]);
+
+        if (type.equals("HOURLY")) {
+            return new HourlyEmployee(name, id, payRate, ytdEarnings, ytdTaxesPaid, pretaxDeductions);
+        } else if (type.equals("SALARY")) {
+            return new SalaryEmployee(name, id, payRate, ytdEarnings, ytdTaxesPaid, pretaxDeductions);
+        }
 
         return null;
     }
@@ -35,7 +53,13 @@ public final class Builder {
      * @return a TimeCard object
      */
     public static ITimeCard buildTimeCardFromCSV(String csv) {
-    
-        return null;
+        String[] parts = csv.split(",");
+        if (parts.length != 2) {
+            return null;
+        }
+
+        String id = parts[0];
+        double hoursWorked = Double.parseDouble(parts[1]);
+        return new TimeCard(id, hoursWorked);
     }
 }
