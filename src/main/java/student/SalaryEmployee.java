@@ -41,7 +41,6 @@ public class SalaryEmployee implements IEmployee {
         this.payRate = payRate;
         this.ytdEarnings = ytdEarnings;
         this.ytdTaxesPaid = ytdTaxesPaid;
-        this.ytdTaxesPaid = ytdTaxesPaid;
         this.pretaxDeductions = pretaxDeductions;
     }
 
@@ -126,14 +125,17 @@ public class SalaryEmployee implements IEmployee {
         }
 
         double totalPay = payRate / 24;
-        double payShouldTax = totalPay - pretaxDeductions;
+        double periodPretaxDeductions = pretaxDeductions / 24;
+        double payShouldTax = totalPay - periodPretaxDeductions;
         double taxes = payShouldTax * 0.2265;
         double payAfterTax = payShouldTax - taxes;
+
         ytdEarnings += payAfterTax;
         ytdTaxesPaid += taxes;
 
         return new PayStub(name, payAfterTax, taxes, ytdEarnings, ytdTaxesPaid);
     }
+
 
     @Override
     public String toCSV() {
