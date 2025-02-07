@@ -144,6 +144,4 @@ public class SalaryEmployee implements IEmployee {
                 + ytdEarnings + ","
                 + ytdTaxesPaid;
     }
-
-
 }

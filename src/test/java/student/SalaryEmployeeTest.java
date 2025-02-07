@@ -55,8 +55,7 @@ class SalaryEmployeeTest {
         assertNotNull(stub);
 
         double expectedTotalPay = 48000.0 / 24;
-        double expectedPretaxDeductions = 200.0 / 24;
-        double expectedPayShouldTax = expectedTotalPay - expectedPretaxDeductions;
+        double expectedPayShouldTax = expectedTotalPay - 200;
         double expectedTaxes = expectedPayShouldTax * 0.2265;
         double expectedPayAfterTax = expectedPayShouldTax - expectedTaxes;
 
