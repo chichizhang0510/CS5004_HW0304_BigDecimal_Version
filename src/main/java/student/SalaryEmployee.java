@@ -125,17 +125,14 @@ public class SalaryEmployee implements IEmployee {
         }
 
         double totalPay = payRate / 24;
-        double periodPretaxDeductions = pretaxDeductions / 24;
-        double payShouldTax = totalPay - periodPretaxDeductions;
+        double payShouldTax = totalPay - pretaxDeductions;
         double taxes = payShouldTax * 0.2265;
         double payAfterTax = payShouldTax - taxes;
-
         ytdEarnings += payAfterTax;
         ytdTaxesPaid += taxes;
 
         return new PayStub(name, payAfterTax, taxes, ytdEarnings, ytdTaxesPaid);
     }
-
 
     @Override
     public String toCSV() {
