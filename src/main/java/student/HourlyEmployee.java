@@ -137,8 +137,10 @@ public class HourlyEmployee implements IEmployee {
         double payShouldTax = totalPay - pretaxDeductions;
         double taxes = payShouldTax * 0.2265;
         double payAfterTax = payShouldTax - taxes;
+        ytdEarnings += payAfterTax;
+        ytdTaxesPaid += taxes;
 
-        return new PayStub(name, payAfterTax, taxes, ytdEarnings + payAfterTax, +ytdTaxesPaid + taxes);
+        return new PayStub(name, payAfterTax, taxes, ytdEarnings, ytdTaxesPaid);
     }
 
     /**
