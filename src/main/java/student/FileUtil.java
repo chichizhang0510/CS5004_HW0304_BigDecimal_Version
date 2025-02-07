@@ -3,6 +3,7 @@ package student;
 // note: java.nio was introduced in Java 17.
 // if you have an older version of Java, you will either
 // want to update, or convert this code to use Buffered reader
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.Path;
@@ -85,7 +86,7 @@ public final class FileUtil {
         }
 
         try {
-            Files.write(Path.of(outFile), lines);
+            Files.write(Path.of(outFile), lines, StandardCharsets.UTF_8);
         } catch (IOException e) {
             System.err.println("Error writing to file: " + e.getMessage());
         }

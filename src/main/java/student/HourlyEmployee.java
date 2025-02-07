@@ -41,7 +41,6 @@ public class HourlyEmployee implements IEmployee {
         this.payRate = payRate;
         this.ytdEarnings = ytdEarnings;
         this.ytdTaxesPaid = ytdTaxesPaid;
-        this.ytdTaxesPaid = ytdTaxesPaid;
         this.pretaxDeductions = pretaxDeductions;
     }
 
@@ -150,6 +149,12 @@ public class HourlyEmployee implements IEmployee {
      */
     @Override
     public String toCSV() {
-        return "";
+        return getEmployeeType() + ","
+                + name + ","
+                + id + ","
+                + payRate + ","
+                + pretaxDeductions + ","
+                + ytdEarnings + ","
+                + ytdTaxesPaid;
     }
 }

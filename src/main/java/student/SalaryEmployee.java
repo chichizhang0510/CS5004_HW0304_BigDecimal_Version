@@ -4,7 +4,7 @@ package student;
  * Represents a salaried employee who is paid a fixed amount per pay period.
  * Implements the {@link IEmployee} interface to define employee behavior.
  */
-public class SalaryEmployee implements IEmployee {
+public class SalaryEmployee implements IEmployee{
     /** The name of the employee. */
     private String name;
 
@@ -101,6 +101,16 @@ public class SalaryEmployee implements IEmployee {
     }
 
     /**
+     * Gets the employee type as a string.
+     *
+     * @return "SALARY" indicating this employee is a salaried employee.
+     */
+    @Override
+    public String getEmployeeType() {
+        return "SALARY";
+    }
+
+    /**
      * Runs payroll for the current pay period, calculating gross pay, deductions, and taxes.
      * - If hours worked is negative, payroll is skipped and returns {@code null}.
      * - Salaried employees are paid a fixed amount, which is their annual salary divided by 24.
@@ -123,24 +133,16 @@ public class SalaryEmployee implements IEmployee {
         return new PayStub(name, payAfterTax, taxes, ytdEarnings + payAfterTax, +ytdTaxesPaid + taxes);
     }
 
-    /**
-     * Converts the employee's information to a CSV-formatted string.
-     * The format follows: "SALARY,name,id,payRate,pretaxDeductions,YTDEarnings,YTDTaxesPaid".
-     *
-     * @return A CSV string representing the employee.
-     */
     @Override
     public String toCSV() {
-        return "";
+        return getEmployeeType() + ","
+                + name + ","
+                + id + ","
+                + payRate + ","
+                + pretaxDeductions + ","
+                + ytdEarnings + ","
+                + ytdTaxesPaid;
     }
 
-    /**
-     * Gets the employee type as a string.
-     *
-     * @return "SALARY" indicating this employee is a salaried employee.
-     */
-    @Override
-    public String getEmployeeType() {
-        return "SALARY";
-    }
+
 }

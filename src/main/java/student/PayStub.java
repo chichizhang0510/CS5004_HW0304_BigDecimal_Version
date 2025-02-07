@@ -1,5 +1,7 @@
 package student;
 
+import java.util.Locale;
+
 /**
  * Represents a pay stub for an employee, containing details about the pay, taxes,
  * and year-to-date (YTD) information.
@@ -67,9 +69,9 @@ public class PayStub implements IPayStub {
     @Override
     public String toCSV() {
         return name + ","
-                + String.format("%.2f", payAfterTax) + ","
-                + String.format("%.2f", tax) + ","
-                + String.format("%.2f", ytdEarnings) + ","
-                + String.format("%.2f", ytdTaxesPaid);
+                + String.format(Locale.US, "%.2f", payAfterTax) + ","
+                + String.format(Locale.US, "%.2f", tax) + ","
+                + String.format(Locale.US, "%.2f", ytdEarnings) + ","
+                + String.format(Locale.US, "%.2f", ytdTaxesPaid);
     }
 }
