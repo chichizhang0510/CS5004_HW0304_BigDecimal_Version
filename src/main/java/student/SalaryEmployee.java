@@ -4,7 +4,7 @@ package student;
  * Represents a salaried employee who is paid a fixed amount per pay period.
  * Implements the {@link IEmployee} interface to define employee behavior.
  */
-public class SalaryEmployee implements IEmployee{
+public class SalaryEmployee implements IEmployee {
     /** The name of the employee. */
     private String name;
 
